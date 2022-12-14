@@ -1,0 +1,35 @@
+{
+  "releaseSolution_average":"5.59",
+  "releaseSolution_median":".49",
+  "releaseSolution_var":"236.72",
+  "active10Developers":
+  {
+    "Antonio Cheong":426,
+    "Harry":20,
+    "snowmeow2":8,
+    "Scott Leibrand":7,
+    "PyRo1121":5,
+    "PenutChen":4,
+    "Luka Evetovic":3,
+    "Dark Litss":3,
+    "superswan":3,
+    "Amit Moryossef":2
+  },
+  "releases_num":66,
+  "openIssues_num":53,
+  "timeLocation":
+  {
+    "sunday":121,
+    "saturday":38,
+    "tuesday":108,
+    "thursday":56,
+    "friday":27,
+    "wednesday":75,
+    "monday":95
+  },
+  "repo_name":"acheong08/ChatGPT",
+  "releaseSolution_range":"117.64",
+  "developers_num":41,
+  "closedIssues_num":232,
+  "commits_num":520
+}
