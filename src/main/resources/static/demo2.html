@@ -1,45 +1,73 @@
+<html>
 
-<!doctype html>
-<meta charset="utf-8" />
-<style>
-    body{background:#999}
-    .container {
-        margin: 0 auto;
-        width: 360px;
-        border-radius: 20px;
-        box-shadow: rgba(0,0,0,.6) 10px 10px 2px;
-        padding-top: 10px;
-        text-align: center;
-        background: #fff
-    }
-    .container .item {
-        padding-left: 100px;
-        background: #504d58 url(https://img-mid.csdnimg.cn/release/static/image/mid/ask/409256676536179.png) no-repeat 70px center;
-        line-height: inherit;
-        border-bottom: 2px solid #fff;
-        line-height: 50px;
-        color: #fff;
-        text-align: left
-    }
-    .container .item:last-of-type {
-        border-bottom: 0;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-    }
-</style>
-<div class="container">
-    <img src="https://img-mid.csdnimg.cn/release/static/image/mid/ask/95465667653616.jpg" /><br />
-    <img src="https://img-mid.csdnimg.cn/release/static/image/mid/ask/05174667653616.jpg" />
-    <div class="item">
-        vnessa--constance
-    </div>
-    <div class="item">
-        vnessa--constance
-    </div>
-    <div class="item">
-        vnessa--constance
-    </div>
-    <div class="item">
-        vnessa--constance
-    </div>
-</div>
+<head>
+    <meta charset="utf-8">
+    <title>词云图案例</title>
+    <script type="text/javascript" src='js/echarts.js'></script>
+    <script type="text/javascript" src='js/echarts-wordcloud.min.js'></script>
+</head>
+
+<body>
+<div id="wordcloud_echarts" style="width:80%;height: 500px;border: 1px solid black"></div>
+<script type="text/javascript">
+    //基于准备好的dom，初始化ECharts图表
+    var myChart = echarts3.init(document.getElementById('wordcloud_echarts'));
+    var keywords = [{"name":"男神","value":2.64},
+        {"name":"好身材","value":4.03},
+        {"name":"校草","value":24.95},
+        {"name":"酷","value":4.04},
+        {"name":"时尚","value":5.27},
+        {"name":"阳光活力","value":5.80},
+        {"name":"初恋","value":3.09},
+        {"name":"英俊潇洒","value":24.71},
+        {"name":"霸气","value":6.33},
+        {"name":"腼腆","value":2.55},
+        {"name":"蠢萌","value":3.88},
+        {"name":"青春","value":8.04},
+        {"name":"网红","value":5.87},
+        {"name":"萌","value":6.97},
+        {"name":"认真","value":2.53},
+        {"name":"古典","value":2.49},
+        {"name":"温柔","value":3.91},
+        {"name":"有个性","value":3.25},
+        {"name":"可爱","value":9.93},
+        {"name":"幽默诙谐","value":3.65}]
+    console.log(typeof keywords[0]);
+
+    var option = {
+        title: {
+          text :"wfiqnfnqif"
+        },
+        series: [{
+            type: 'wordCloud',
+            sizeRange: [15, 80],
+            rotationRange: [0, 0],
+            rotationStep: 45,
+            gridSize: 8,
+            shape: 'pentagon',
+            width: '100%',
+            height: '100%',
+            textStyle: {
+                normal: {
+                    color: function () {
+                        return 'rgb(' + [
+                            Math.round(Math.random() * 160),
+                            Math.round(Math.random() * 160),
+                            Math.round(Math.random() * 160)
+                        ].join(',') + ')';
+                    }
+                }
+            },
+            data: keywords
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    window.addEventListener("resize", function() {
+        myChart.resize();
+    });
+
+</script>
+</body>
+
+</html>

@@ -62,7 +62,7 @@ public class issue {
         URL url = new URL(comments_url);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Authorization", "Bearer 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");
+        connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
         connection.connect();
 

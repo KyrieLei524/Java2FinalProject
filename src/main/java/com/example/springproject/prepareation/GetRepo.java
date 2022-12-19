@@ -4,6 +4,7 @@ package com.example.springproject.prepareation;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hankcs.hanlp.HanLP;
 import json.JsonFormater;
 
 import java.io.BufferedReader;
@@ -21,7 +22,8 @@ public class GetRepo {
     //yueyangw/yueyangw.github.io
     //acheong08/ChatGPT
     //ccg2018/ClashA
-
+//    https://github.com/JamesNK/Newtonsoft.Json
+    //PyO3/pyo3
     public static String repo_url = "https://api.github.com/repos/acheong08/ChatGPT";
     public static String repo_name = "acheong08/ChatGPT";
     public static String commits_url = repo_url + "/commits";
@@ -100,31 +102,46 @@ public class GetRepo {
 
     public static void main(String[] args) throws IOException, ParseException {
         init();
-//        System.out.println(222);
+        System.out.println(222);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("repo_name", repo_name);
         jsonObject.put("developers_num",developers_num);
         jsonObject.put("active10Developers", activeD());
+        jsonObject.put("activeDevelopersEmail", activeD_email());
         jsonObject.put("openIssues_num", openIssues_num);
         jsonObject.put("closedIssues_num", closedIssues_num);
         jsonObject.put("commits_num", commitsList.size());
-        jsonObject.put("releaseSolution_var", df.format(issue_solve_D / 3600 / 3600));
-        jsonObject.put("releaseSolution_average", df.format(issue_solve_average / 3600));
-        jsonObject.put("releaseSolution_median", df.format(issue_solve_median / 3600));
-        jsonObject.put("releaseSolution_range", df.format(issue_solve_jicha / 3600));
+        jsonObject.put("releaseSolution_var", df.format(issue_solve_D / 3600 / 3600 / 24));
+        jsonObject.put("releaseSolution_average", df.format(issue_solve_average / 3600 / 24));
+        jsonObject.put("releaseSolution_median", df.format(issue_solve_median / 3600 / 24));
+        jsonObject.put("releaseSolution_range", df.format(issue_solve_jicha / 3600 / 24));
         jsonObject.put("releases_num", release_num);
         jsonObject.put("timeLocation", timeLocation);
-//
-//
+        jsonObject.put("commit_numBetweenRelease", commitBetweenRelease);
+        jsonObject.put("Keywords", getKeywords());
+
+
         System.out.println(JsonFormater.format(jsonObject.toJSONString()));
 
-
+//        System.out.println(getKeywords());
 //        getDeveloperNum();
 //        getMostActive();
 ////        for(int i = 0; i < developersList.size(); i++){
 ////            System.out.println(commitsList.get(i).getName());
 ////        }
 //        System.out.println(activeD());
+
+
+        for(int i = 0; i < releaseList.size(); i++){
+            System.out.println(releaseList.get(i).release_at);
+        }
+
+        System.out.println("commit");
+        for(int i = 0; i < commitsList.size(); i++){
+            System.out.println(commitsList.get(i).commit_at);
+        }
+        System.out.println(commitBetweenRelease);
+
 
 
     }
@@ -136,6 +153,23 @@ public class GetRepo {
         }
         return map;
     }
+    public static Map<String, String> activeD_email(){
+        Map<String, String> map = new LinkedHashMap<>();
+        for(int i = 0; i < 10; i++){
+            map.put(name.get(i), getEmail(name.get(i)));
+        }
+        return map;
+    }
+
+    public static String getEmail(String name){
+        for(int i = 0; i < commitsList.size(); i++){
+            if(commitsList.get(i).name.equals(name)){
+                return commitsList.get(i).email;
+            }
+        }
+        return null;
+    }
+
     //得到该库中解决问题所用时间的各项特征值
     public static void getSolutionTimeSymbol(){
         double[] numbers = new double[closedIssues_num];
@@ -203,7 +237,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
@@ -262,7 +296,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
@@ -338,7 +372,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
@@ -353,7 +387,7 @@ public class GetRepo {
             }
             in.close();
 //
-            System.out.println(JsonFormater.format(response.toString()));
+//            System.out.println(JsonFormater.format(response.toString()));
 
             String name;
             String date;
@@ -394,7 +428,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
@@ -434,22 +468,48 @@ public class GetRepo {
 
     //判断一个时间在不在两个时间的中间
     public static boolean checkDate(Date begin, Date end, Date date){
-        if(date.getTime() > begin.getTime() || end.getTime() > date.getTime())        return true;
+        if(date.getTime() > begin.getTime() && end.getTime() > date.getTime())        return true;
         return false;
     }
 
     //得到release间的commit数量 release从以前到现在
     public static void getRealeaseCommit(){
-        for(int i = releaseList.size() - 2; i >= 0; i--){
+        for(int i = releaseList.size()- 1; i > 0; i--){
             int num = 0;
             for(int j = 0; j < commitsList.size(); j++){
-                if(checkDate(releaseList.get(i).release_at, releaseList.get(i + 1).release_at, commitsList.get(j).commit_at)) num++;
+                if(checkDate(releaseList.get(i).release_at, releaseList.get(i - 1).release_at, commitsList.get(j).commit_at)) num++;
+//                System.out.println(releaseList.get(i).release_at);
+//                System.out.println(releaseList.get(i - 1).release_at);
+//                System.out.println(commitsList.get(j).commit_at);
+//                System.out.println(checkDate(releaseList.get(i).release_at, releaseList.get(i - 1).release_at, commitsList.get(j).commit_at));
             }
             commitBetweenRelease.add(num);
         }
+//        for(int i = 0; i < releaseList.size(); i++){
+//            System.out.println(releaseList.get(i).release_at.);
+//        }
     }
 
     //获取issue 相关文本 出现频次前十的关键词及次数
+    public static Map<String, Float> getKeywords(){
+        StringBuilder text = new StringBuilder();
+        for(int i = 0; i < openIssueList.size(); i++){
+            text.append(openIssueList.get(i).title);
+            text.append(openIssueList.get(i).body);
+            for(int j = 0; j < openIssueList.get(i).commentsList.size(); j++){
+                text.append(openIssueList.get(i).commentsList.get(j));
+            }
+        }
+        for(int i = 0; i < closedIssueList.size(); i++){
+            text.append(closedIssueList.get(i).title);
+            text.append(closedIssueList.get(i).body);
+            for(int j = 0; j < closedIssueList.get(i).commentsList.size(); j++){
+                text.append(closedIssueList.get(i).commentsList.get(j));
+            }
+        }
+        Map<String, Float> keywordList = TextRankKeyword2.getTerm_Rank(text.toString(), 700);
+        return keywordList;
+    }
 
 
 
