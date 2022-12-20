@@ -17,75 +17,77 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GetRepo {
-    //Dreamacro/clash
-    //youshandefeiyang/IPTV 测试Issues
-    //yueyangw/yueyangw.github.io
-    //acheong08/ChatGPT
-    //ccg2018/ClashA
-//    https://github.com/JamesNK/Newtonsoft.Json
-    //PyO3/pyo3
-    public static String repo_url = "https://api.github.com/repos/acheong08/ChatGPT";
-    public static String repo_name = "acheong08/ChatGPT";
-    public static String commits_url = repo_url + "/commits";
-    public static String issues_url = repo_url + "/issues";
-    public static String release_url = repo_url + "/releases";
-    //release间的commit数量列表
-    public static ArrayList<Integer> commitBetweenRelease = new ArrayList<>();
+  //Dreamacro/clash
+  //youshandefeiyang/IPTV 测试Issues
+  //yueyangw/yueyangw.github.io
+  //acheong08/ChatGPT
+  //ccg2018/ClashA
+  //https://github.com/JamesNK/Newtonsoft.Json
+  //PyO3/pyo3
+  //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
+  //PyFilesystem/pyfilesystem2
+  public static String repo_url = "https://api.github.com/repos/PyFilesystem/pyfilesystem2";
+  public static String repo_name = "PyFilesystem/pyfilesystem2";
+  public static String commits_url = repo_url + "/commits";
+  public static String issues_url = repo_url + "/issues";
+  public static String release_url = repo_url + "/releases";
+  //release间的commit数量列表
+  public static ArrayList<Integer> commitBetweenRelease = new ArrayList<>();
     //release列表
-    public static ArrayList<release> releaseList = new ArrayList<>();
+  public static ArrayList<release> releaseList = new ArrayList<>();
     //release的总数
-    public static int release_num;
+  public static int release_num;
     //开发者数量
-    public static int developers_num;
+  public static int developers_num;
     //开发者列表
-    public static ArrayList<String> developersList = new ArrayList<>();
+  public static ArrayList<String> developersList = new ArrayList<>();
     //最活跃开发者姓名列表
-    public static ArrayList<String> name = new ArrayList<>();
+  public static ArrayList<String> name = new ArrayList<>();
     //最活跃开发者姓名对应的commit数量
-    public static ArrayList<Long> commit_num = new ArrayList<>();
+  public static ArrayList<Long> commit_num = new ArrayList<>();
     //该库commit列表
-    public static ArrayList<commit> commitsList = new ArrayList<>();
+  public static ArrayList<commit> commitsList = new ArrayList<>();
     //该库已经关闭的issues的列表
-    public static ArrayList<issue> closedIssueList = new ArrayList<>();
+  public static ArrayList<issue> closedIssueList = new ArrayList<>();
     //该库关闭issue数量
-    public static int closedIssues_num;
+  public static int closedIssues_num;
     //该库开放issue数量
-    public static int openIssues_num;
+  public static int openIssues_num;
     //该库开放issue列表
-    public static ArrayList<issue> openIssueList = new ArrayList<>();
+  public static ArrayList<issue> openIssueList = new ArrayList<>();
     //该库解决issue的平均时间
-    public static double issue_solve_average;
+  public static double issue_solve_average;
     //该库解决issue时间的中位数
-    public static double issue_solve_median;
+  public static double issue_solve_median;
     //该库解决issue时间的方差
-    public static double issue_solve_D;
+  public static double issue_solve_D;
     //该库解决issue时间的极值差
-    public static double issue_solve_jicha;
+  public static double issue_solve_jicha;
     //该库commit时间分布
-    public static Map<String, Long> timeLocation = new LinkedHashMap<>();
+  public static Map<String, Long> timeLocation = new LinkedHashMap<>();
     //获取该库关键词列表 降序
-    public static Map<String, Integer> keywords = new HashMap<>();
+  public static Map<String, Integer> keywords = new HashMap<>();
 
-    public static void init() throws IOException, ParseException {
-        System.out.println(0);
-        getDeveloperNum();
-        System.out.println(1);
-        getMostActive();
-        System.out.println(2);
-        getTimeLocation();
-        getClosedIssues();
-        System.out.println(3);
-        getOpenIssues();
-        System.out.println(4);
-        getSolutionTimeSymbol();
-        System.out.println(5);
-        getReleaseList();
-        System.out.println(6);
-        getRealeaseCommit();
-        System.out.println(7);
-    }
+  public static void init() throws IOException, ParseException {
+    System.out.println(0);
+    getDeveloperNum();
+    System.out.println(1);
+    getMostActive();
+    System.out.println(2);
+    getTimeLocation();
+    getClosedIssues();
+    System.out.println(3);
+    getOpenIssues();
+    System.out.println(4);
+    getSolutionTimeSymbol();
+    System.out.println(5);
+    getReleaseList();
+    System.out.println(6);
+    getRealeaseCommit();
+    System.out.println(7);
+  }
 
-    public static void getTimeLocation(){
+  public static void getTimeLocation(){
         timeLocation =  commitsList.
                 stream().
                 collect(
@@ -97,31 +99,31 @@ public class GetRepo {
 
     }
 
-    static java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
+  static java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
 
 
-    public static void main(String[] args) throws IOException, ParseException {
-        init();
-        System.out.println(222);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("repo_name", repo_name);
-        jsonObject.put("developers_num",developers_num);
-        jsonObject.put("active10Developers", activeD());
-        jsonObject.put("activeDevelopersEmail", activeD_email());
-        jsonObject.put("openIssues_num", openIssues_num);
-        jsonObject.put("closedIssues_num", closedIssues_num);
-        jsonObject.put("commits_num", commitsList.size());
-        jsonObject.put("releaseSolution_var", df.format(issue_solve_D / 3600 / 3600 / 24));
-        jsonObject.put("releaseSolution_average", df.format(issue_solve_average / 3600 / 24));
-        jsonObject.put("releaseSolution_median", df.format(issue_solve_median / 3600 / 24));
-        jsonObject.put("releaseSolution_range", df.format(issue_solve_jicha / 3600 / 24));
-        jsonObject.put("releases_num", release_num);
-        jsonObject.put("timeLocation", timeLocation);
-        jsonObject.put("commit_numBetweenRelease", commitBetweenRelease);
-        jsonObject.put("Keywords", getKeywords());
+  public static void main(String[] args) throws IOException, ParseException {
+    init();
+    System.out.println(222);
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("repo_name", repo_name);
+    jsonObject.put("developers_num",developers_num);
+    jsonObject.put("active10Developers", activeD());
+    jsonObject.put("activeDevelopersEmail", activeD_email());
+    jsonObject.put("openIssues_num", openIssues_num);
+    jsonObject.put("closedIssues_num", closedIssues_num);
+    jsonObject.put("commits_num", commitsList.size());
+    jsonObject.put("releaseSolution_var", df.format(issue_solve_D / 3600 / 3600 / 24));
+    jsonObject.put("releaseSolution_average", df.format(issue_solve_average / 3600 / 24));
+    jsonObject.put("releaseSolution_median", df.format(issue_solve_median / 3600 / 24));
+    jsonObject.put("releaseSolution_range", df.format(issue_solve_jicha / 3600 / 24));
+    jsonObject.put("releases_num", release_num);
+    jsonObject.put("timeLocation", timeLocation);
+    jsonObject.put("commit_numBetweenRelease", commitBetweenRelease);
+    jsonObject.put("Keywords", getKeywords());
 
 
-        System.out.println(JsonFormater.format(jsonObject.toJSONString()));
+    System.out.println(JsonFormater.format(jsonObject.toJSONString()));
 
 //        System.out.println(getKeywords());
 //        getDeveloperNum();
@@ -146,14 +148,14 @@ public class GetRepo {
 
     }
 
-    public static Map<String, Long> activeD(){
+  public static Map<String, Long> activeD(){
         Map<String, Long> map = new LinkedHashMap<>();
         for(int i = 0; i < 10; i++){
             map.put(name.get(i), commit_num.get(i));
         }
         return map;
     }
-    public static Map<String, String> activeD_email(){
+  public static Map<String, String> activeD_email(){
         Map<String, String> map = new LinkedHashMap<>();
         for(int i = 0; i < 10; i++){
             map.put(name.get(i), getEmail(name.get(i)));

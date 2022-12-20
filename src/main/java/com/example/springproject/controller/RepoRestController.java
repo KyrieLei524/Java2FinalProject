@@ -49,6 +49,7 @@ public class RepoRestController {
 
     @RequestMapping("/{reponame}/show")
     public String show(@PathVariable(value = "reponame") String reponame){
+        String url = reponame.replace("_", "/");
         String index = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head lang=\"en\">\n" +
@@ -56,9 +57,11 @@ public class RepoRestController {
                 "    <title>repo相关数据展示</title>\n" +
                 "    <script src=\"https://s3.pstatp.com/cdn/expire-1-M/jquery/3.2.1/jquery.min.js\" ></script>\n" +
                 "    <script src=\"https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js\"></script>\n" +
+                "    <script type=\"text/javascript\" src='http://localhost:8084/js/echarts.js'></script>\n" +
+                "    <script type=\"text/javascript\" src='http://localhost:8084/js/echarts-wordcloud.min.js'></script>\n" +
                 "\n" +
                 "    <style type=\"text/css\">\n" +
-                "        body{background: gainsboro}\n" +
+                "        /*body{background: gainsboro}*/\n" +
                 "        /* 被style标签包围的是css环境 可以写css代码 */\n" +
                 "        /* 标签样式表 */\n" +
                 "        p{\n" +
@@ -135,7 +138,7 @@ public class RepoRestController {
                 "            float: left;\n" +
                 "            border-radius: 20px;\n" +
                 "            box-shadow: rgba(0,0,0,.6) 10px 10px 2px;\n" +
-                "            background: #fff;\n" +
+                "            background: gainsboro;\n" +
                 "        }\n" +
                 "\n" +
                 "        .bigFloat{\n" +
@@ -146,7 +149,10 @@ public class RepoRestController {
                 "    </style>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<p class=\"reponame\">repo name : <span id=\"1\">var1</span></p>\n" +
+                "<p style=\"margin-bottom: 50px; margin-top: 30px; font-weight: bolder;\n" +
+                "             font-family: 'Comic Sans MS'\">\n" +
+                "<a class=\"reponame\" href=\"https://github.com/" + url + "\" target=\"_blank\">repo name : <span id=\"1\"   >var1</span></a>\n" +
+                "</p>\n" +
                 "\n" +
                 "<div class=\"bigFloat\">\n" +
                 "<p class=\"lei\">developers: </p><br>\n" +
@@ -170,8 +176,8 @@ public class RepoRestController {
                 "    <br>\n" +
                 "</div>\n" +
                 "<br>    <br>    <br>\n" +
-                "    <div id=\"rank\" style=\"width: 800px;height:500px;margin-top: 50px;margin-bottom: 30px\"></div>\n" +
                 "\n" +
+                "    <div id=\"rank\" style=\"width: 800px;height:500px;margin-top: 1px;margin-bottom: 30px\"></div>\n" +
                 "\n" +
                 "</div>\n" +
                 "\n" +
@@ -389,8 +395,7 @@ public class RepoRestController {
                 "    var obj;\n" +
                 "    function getResources(){\n" +
                 "        $.ajax({\n" +
-                "            url:'http://localhost:8084/repo/" + reponame
-                + "',\t//这是后端接口的url\n" +
+                "            url:'http://localhost:8084/repo/" + reponame + "',\t//这是后端接口的url\n" +
                 "            method:'get',\n" +
                 "            success:function (res) {\n" +
                 "                // console.log(res);\n" +
@@ -418,6 +423,8 @@ public class RepoRestController {
                 "                saturday = time_location.saturday;\n" +
                 "                sunday = time_location.sunday;\n" +
                 "\n" +
+                "                var keywords = obj.Keywords;\n" +
+                "                console.log(keywords);\n" +
                 "                var rank = JSON.parse(JSON.stringify(obj.active10Developers));\n" +
                 "                var email = JSON.parse(JSON.stringify(obj.activeDevelopersEmail));\n" +
                 "                console.log(typeof rank);\n" +
@@ -453,10 +460,52 @@ public class RepoRestController {
                 "                //这里需要注意：res为局部变量，\n" +
                 "                //所以需要在方法外定义一个变量把res赋值给他，才能在方法之外使用。\n" +
                 "                barGraph(dateArray, nameArray, emailArray);\n" +
-                "                barGraph2(dateArray, nameArray, emailArray);\n" +
                 "                setChar3(x_zhou, cbr);\n" +
+                "                keyword(keywords);\n" +
                 "            },\n" +
                 "        })\n" +
+                "    }\n" +
+                "\n" +
+                "    function keyword(key){\n" +
+                "        //基于准备好的dom，初始化ECharts图表\n" +
+                "        var myChart = echarts3.init(document.getElementById('rank'));\n" +
+                "        var option = {\n" +
+                "            title: {\n" +
+                "                text: \"popular topic\",\n" +
+                "            },\n" +
+                "            toolbox: {\n" +
+                "                feature: {\n" +
+                "                    // saveAsImage: {},\n" +
+                "                },\n" +
+                "            },\n" +
+                "            tooltip: {\n" +
+                "\n" +
+                "            },\n" +
+                "            series: [{\n" +
+                "                type: 'wordCloud',\n" +
+                "                sizeRange: [15, 80],\n" +
+                "                rotationRange: [0, 0],\n" +
+                "                rotationStep: 45,\n" +
+                "                gridSize: 8,\n" +
+                "                shape: 'pentagon',\n" +
+                "                width: '100%',\n" +
+                "                height: '100%',\n" +
+                "                textStyle: {\n" +
+                "                    normal: {\n" +
+                "                        color: function () {\n" +
+                "                            return 'rgb(' + [\n" +
+                "                                Math.round(Math.random() * 160),\n" +
+                "                                Math.round(Math.random() * 160),\n" +
+                "                                Math.round(Math.random() * 160)\n" +
+                "                            ].join(',') + ')';\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                },\n" +
+                "                data: key\n" +
+                "            }]\n" +
+                "        };\n" +
+                "        // 使用刚指定的配置项和数据显示图表。\n" +
+                "        myChart.setOption(option);\n" +
                 "    }\n" +
                 "\n" +
                 "    function setChar3(x_array, y_array){\n" +
@@ -634,141 +683,6 @@ public class RepoRestController {
                 "        });\n" +
                 "    }\n" +
                 "\n" +
-                "    function barGraph2(dataArray, nameArray, emilArray){\n" +
-                "        //初始化图标\n" +
-                "        var myChart = echarts.init(document.getElementById('rank'));\n" +
-                "        //Y轴的数据，和数据值位置一一对应\n" +
-                "        var cate = [\n" +
-                "            \"1\",\n" +
-                "            \"2\",\n" +
-                "            \"3\",\n" +
-                "            \"4\",\n" +
-                "            \"5\",\n" +
-                "            \"6\",\n" +
-                "            \"7\",\n" +
-                "            \"8\",\n" +
-                "            \"9\",\n" +
-                "            \"10\",\n" +
-                "        ];\n" +
-                "        //数据值，顺序和Y轴的名字一一对应\n" +
-                "        var barData = dataArray;\n" +
-                "\n" +
-                "        var option = {\n" +
-                "            title: {\n" +
-                "                text: \"commit排行榜top10\",\n" +
-                "            },\n" +
-                "            tooltip: {\n" +
-                "                trigger: \"axis\",\n" +
-                "                axisPointer: {\n" +
-                "                    type: \"shadow\",\n" +
-                "                },\n" +
-                "                formatter: function (params) {\n" +
-                "                    var result = ''\n" +
-                "                    var dotHtml = '<span style=\"display:inline-block;margin-right:5px;border-radius:10px;width:5px;height:5px;background-color: yellow\"></span>'    // 定义第一个数据前的圆点颜色\n" +
-                "                    var dotHtml2 = '<span style=\"display:inline-block;margin-right:5px;border-radius:10px;width:5px;height:5px;background-color: green\"></span>'    // 定义第二个数据前的圆点颜色\n" +
-                "                    var dotHtml3 = '<span style=\"display:inline-block;margin-right:5px;border-radius:10px;width:5px;height:5px;background-color: red\"></span>'\n" +
-                "                    result += params[0].axisValue + \"</br>\" + dotHtml + \"name:\"+ nameArray[params[0].axisValue - 1] +\n" +
-                "                        \"<br>\" + dotHtml2 + \"commit number:\" + dataArray[params[0].axisValue - 1 ] +\n" +
-                "                        \"<br>\" + dotHtml3 + \"email address:\" + emilArray[params[0].axisValue - 1 ]\n" +
-                "                    ;\n" +
-                "                    return result\n" +
-                "                },\n" +
-                "            },\n" +
-                "            //图表位置\n" +
-                "            grid: {\n" +
-                "                left: \"3%\",\n" +
-                "                right: \"4%\",\n" +
-                "                bottom: \"3%\",\n" +
-                "                containLabel: true,\n" +
-                "            },\n" +
-                "            //X轴\n" +
-                "            xAxis: {\n" +
-                "                type: \"value\",\n" +
-                "                axisLine: {\n" +
-                "                    show: false,\n" +
-                "                },\n" +
-                "                axisTick: {\n" +
-                "                    show: false,\n" +
-                "                },\n" +
-                "                //不显示X轴刻度线和数字\n" +
-                "                splitLine: { show: false },\n" +
-                "                axisLabel: { show: false },\n" +
-                "            },\n" +
-                "            yAxis: {\n" +
-                "                type: \"category\",\n" +
-                "                data: cate,\n" +
-                "                //升序\n" +
-                "                inverse: true,\n" +
-                "                splitLine: { show: false },\n" +
-                "                axisLine: {\n" +
-                "                    show: false,\n" +
-                "                },\n" +
-                "                axisTick: {\n" +
-                "                    show: false,\n" +
-                "                },\n" +
-                "                //key和图间距\n" +
-                "                offset: 10,\n" +
-                "                //动画部分\n" +
-                "                animationDuration: 300,\n" +
-                "                animationDurationUpdate: 300,\n" +
-                "                //key文字大小\n" +
-                "                nameTextStyle: {\n" +
-                "                    fontSize: 5,\n" +
-                "                },\n" +
-                "            },\n" +
-                "            series: [\n" +
-                "                {\n" +
-                "                    //柱状图自动排序，排序自动让Y轴名字跟着数据动\n" +
-                "                    realtimeSort: true,\n" +
-                "                    name: \"数量\",\n" +
-                "                    type: \"bar\",\n" +
-                "                    data: barData,\n" +
-                "                    barWidth: 14,\n" +
-                "                    barGap: 10,\n" +
-                "                    smooth: true,\n" +
-                "                    valueAnimation: true,\n" +
-                "                    // Y轴数字显示部分\n" +
-                "                    label: {\n" +
-                "                        normal: {\n" +
-                "                            show: true,\n" +
-                "                            position: \"right\",\n" +
-                "                            valueAnimation: true,\n" +
-                "                            offset: [5, -2],\n" +
-                "                            textStyle: {\n" +
-                "                                color: \"#333\",\n" +
-                "                                fontSize: 13,\n" +
-                "                            },\n" +
-                "                        },\n" +
-                "                    },\n" +
-                "                    itemStyle: {\n" +
-                "                        emphasis: {\n" +
-                "                            barBorderRadius: 7,\n" +
-                "                        },\n" +
-                "                        //颜色样式部分\n" +
-                "                        normal: {\n" +
-                "                            barBorderRadius: 7,\n" +
-                "                            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [\n" +
-                "                                { offset: 0, color: \"#3977E6\" },\n" +
-                "                                { offset: 1, color: \"#37BBF8\" },\n" +
-                "                            ]),\n" +
-                "                        },\n" +
-                "                    },\n" +
-                "                },\n" +
-                "            ],\n" +
-                "            // 动画部分\n" +
-                "\n" +
-                "            animationDuration: 0,\n" +
-                "            animationDurationUpdate: 3000,\n" +
-                "            animationEasing: \"linear\",\n" +
-                "            animationEasingUpdate: \"linear\",\n" +
-                "        };\n" +
-                "\n" +
-                "        myChart.setOption(option);\n" +
-                "        // 图表大小变动从新渲染，动态自适应\n" +
-                "        window.addEventListener(\"resize\", function () {\n" +
-                "            myChart.resize();\n" +
-                "        });\n" +
-                "    }\n" +
                 "\n" +
                 "\n" +
                 "\n" +
