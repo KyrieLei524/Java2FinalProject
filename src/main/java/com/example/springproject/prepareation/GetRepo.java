@@ -85,6 +85,7 @@ public class GetRepo {
     System.out.println(6);
     getRealeaseCommit();
     System.out.println(7);
+
   }
 
   public static void getTimeLocation(){
@@ -239,7 +240,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
@@ -298,7 +299,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
@@ -374,7 +375,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
@@ -430,7 +431,7 @@ public class GetRepo {
             URL url = new URL(s);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer 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");
+            connection.setRequestProperty("Authorization", "Bearer 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");
 //            connection.setRequestProperty("");
             connection.connect();
 
