@@ -1,3 +1,12 @@
+# Java2FinalProject
+这是SUSTech Java2课程final project项目
+
+本项目使用springboot架构实现了对指定github仓库相关数据的获取及在前端页面中展示
+
+如有疑问可在issue中提出
+
+以下为本项目提供的demo介绍文件
+
 # Spring-Project
 
 ***HOPE YOU CLICK A STAR:star::star::star:***
@@ -42,7 +51,4 @@ Also, there are lots of tricks, like `Lombok` and `Swagger`, which would greatly
 ****
 
 If you have any question, feel free to leave an issue.
-# Java2FinalProject
-这是SUSTech Java2课程final project项目
-本项目使用springboot架构实现了对指定github仓库相关数据的获取及在前端页面中展示
-如有疑问可在issue中提出
+
