@@ -5,6 +5,10 @@
 
 如有疑问可在issue中提出
 
+下图为项目运行展示截图
+
+![image](https://user-images.githubusercontent.com/95976347/233367406-921550b7-6519-4c61-87b9-eb0f40dcfad6.png)
+
 以下为本项目提供的demo介绍文件
 
 # Spring-Project
